@@ -1,0 +1,34 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models
+
+
+    <section class="FeaturesCards">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 FeaturesCardsContainer">
+                    <div class="col-12 col-lg-5 FeaturesInfo">
+                        <p>Our Services</p>
+                        <h1>We Provide The Best Service For Consulting</h1>
+                    </div>
+                    <div class="col-12 cardsContainer">
+                            @{
+                                var blocks = Model.Value<IEnumerable<BlockListItem>>("serviceFeatures");
+                                foreach (var block in blocks)
+                                {
+                                    
+                                    var content = (ContentModels.ServiceCard)block.Content;
+                                    Html.RenderPartial("./Cards/_ServiceCard", content);
+                                }
+                            }
+
+                    </div>
+                    <div class="featureBtn">
+                        <button class="btn btn-light">Browse Services</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

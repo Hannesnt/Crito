@@ -1,0 +1,25 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models
+
+@{
+    var articleCardList = Model.ArticleCard;
+    var blockList = new BlockListModel(articleCardList.Reverse().ToList());
+}
+
+<section class="articles">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 articleContainer">
+                <div class="col-12 articlesTitle">
+                    <h1>Our News And Articles</h1>
+                </div>
+                <div class="col-12 articleCardContainer">
+                    @Html.GetBlockListHtml(blockList)
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

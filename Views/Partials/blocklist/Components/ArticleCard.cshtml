@@ -1,0 +1,31 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models
+
+@{
+    var content = (ContentModels.ArticleCard)Model.Content;
+    var articleCardImage = content.Value<MediaWithCrops>("articleCardImage");
+    var dateTime = content.Value("articleCardDate");
+    string dateString = String.Format("{0:dd/MM-yy}", content.Value("articleCardDate"));
+
+    
+}
+        <div class="col-5 col-md-3 articleCard">
+            <div class="publishDate"><small>@dateString</small></div>
+              @{
+                if(articleCardImage != null)
+                    {
+                        <img src="@articleCardImage.MediaUrl()" alt="@content.Value("articleCardTitle")">
+                    }
+                }
+            @foreach(var tag in content.ArticleCardTag)
+            {
+            <a class="tag"><small>@tag</small></a>
+            }
+            <p>@content.Value("articleCardTitle")</p>
+            <small>@content.Value("articleCardIntroText")</small>
+        </div>
+
+

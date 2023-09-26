@@ -1,0 +1,23 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    var articleCardImage = Model.Value<IPublishedContent>("ArticleCardImage");
+    var tags = Model.Value<IEnumerable<IPublishedContent>>("test");
+}
+	
+
+
+<article class="col-12 col-md-7">
+    <img src="@articleCardImage.Url()" alt="@Model.Value("ArticleCardTitle")">
+    <p>@Model.Value("articleCardText")</p>
+    <div class="tagContainer">
+        @foreach(var item in tags)
+        {
+            <a href="@item.Url()">@item.Value("categoryTitle")</a>
+        }
+    </div>
+</article>
+

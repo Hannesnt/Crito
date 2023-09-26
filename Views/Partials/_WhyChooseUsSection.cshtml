@@ -1,0 +1,34 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models
+
+
+    <section class="whyChooseUs">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 whyChooseUsContainer ">
+                    <div class="col-12 col-lg-4 info">
+                        <p class="infoPara">Why Choose Us</p>
+                        <h1>@Model.Value("whyChooseUsHeadingTitle")</h1>
+                        <div class="col-12 infoContainer">
+
+                            @Html.GetBlockListHtml(Model.WhyChooseUs)
+                            
+                        </div>
+                    </div>
+                    <div class="col-lg-6 image">
+                        @{
+                        var whyChooseUsImage = Model.Value<MediaWithCrops>("whyChooseUsImage");
+                        
+                        if(whyChooseUsImage != null)
+                            {
+                            <img src="@whyChooseUsImage.MediaUrl()" alt="@Model.Value("whyChooseUsHeadingTitle")">
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

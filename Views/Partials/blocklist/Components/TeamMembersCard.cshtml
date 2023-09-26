@@ -1,0 +1,21 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models
+
+@{
+    var content = (ContentModels.TeamMembersCard)Model.Content;
+}
+<div class="col-5 col-md-2 teamCard">
+    
+    @{
+        var teamMembersImage = content.Value<MediaWithCrops>("teamMembersImage");
+        
+        if(teamMembersImage != null){
+            <img src="@teamMembersImage.MediaUrl()" alt="@content.Value("teamMembersName")">
+        }
+    }
+    <p>@content.Value("teamMembersName")</p>
+    <small>@content.Value("teamMembersRole")</small>
+</div>

@@ -1,0 +1,29 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models
+
+<section class="teamSection">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 teamContainer">
+                    <div class="col-12 teamTitle">
+                        <p>Meet Our Team</p>
+                        <div>
+                            <h1>Experience Team Members</h1>
+                            <button class="btn">Browse Team</button>
+                        </div>
+                    </div>
+                    <div class="col-12 teamMembers">
+                        @Html.GetBlockListHtml(Model.TeamMembersCard)
+                    </div>
+                </div>
+            </div>
+            
+            @{
+                Html.RenderPartial("./_TestimonialSection");
+            }
+            
+        </div>
+</section>

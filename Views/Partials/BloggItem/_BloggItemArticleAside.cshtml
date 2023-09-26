@@ -1,0 +1,50 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	var selection = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate).Take(4).ToList();
+
+}
+
+<aside class="col-12 col-md-4">
+    <input type="text" placeholder="Type to search..">
+    <div class="recentPostContainer col-12">
+        <h6>Recent Posts</h6>
+	@foreach (var item in selection)
+	{
+	    string dateString = String.Format("{0:dd/MM-yy}", @item.CreateDate);
+    	<a href="@item.Url()">
+    		<div class="col-12 recentPost">
+                <p>@item.Value("ArticleCardTitle")</p>
+                <small>@dateString</small>
+            </div>
+        </a>
+
+	}
+    </div>
+    <div class="categoriesContainer col-12">
+        <div class="col-8 text-center">
+            <h6>Categories</h6>
+            @{
+            	var categories = Umbraco.Content(Guid.Parse("a469b979-3896-40da-9729-b6ffa4443428"))
+                .ChildrenOfType("category")
+                .Where(x => x.IsVisible());
+            }
+
+        	@foreach (var item in categories)
+        	{
+            <div class="category col-12">
+                <a href="@item.Url()">@item.Name()</a>
+            </div>
+        	}
+
+        </div>
+    </div>
+</aside>
+
+
+
+
+
+

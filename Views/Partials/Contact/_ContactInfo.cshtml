@@ -1,0 +1,42 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Contact>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+
+
+<section class="contactSection">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 contactContainer">
+                <div class="col-10 col-md-3 contactBox">
+                    <div class="contactIcon">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <p>Visit us</p>
+                    </div>
+                    <div class="info">
+                        <small>@Model.Value("contactAdress")</small>
+                    </div>
+                </div>
+                <div class="col-10 col-md-3 contactBox">
+                    <div class="contactIcon">
+                        <i class="fa-solid fa-phone"></i>
+                        <p>Call us</p>
+                    </div>
+                    <div class="info">
+                        @Html.GetBlockListHtml(Model.Phone)
+                    </div>
+                </div>
+                <div class="col-10 col-md-3 contactBox">
+                    <div class="contactIcon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <p>Email us</p>
+                    </div>
+                    <div class="info">
+                        @Html.GetBlockListHtml(Model.Email)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

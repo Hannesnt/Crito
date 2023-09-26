@@ -1,0 +1,61 @@
+﻿@inherits Umbraco.Cms.Web.Common.Macros.PartialViewMacroPage
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Services;
+@using Umbraco.Cms.Core.Models.PublishedContent;
+@inject IUserService UserService;
+@{
+
+    var smallSection = Model.MacroParameters["smallSection"];
+    if(int.TryParse(Model.MacroParameters["articleId"].ToString(), out int articleId))
+    {
+   
+    var selection = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => (x.Id != articleId))
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate).Take(3).ToList();
+    
+    <section class="articles">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 articleContainer">
+                    <div class="col-12 articlesTitle">
+                        <p>Article & News</p>
+                        <div>
+                            <h1>Get Every Single Article & News</h1>
+                            <button class="btn">Browse Articles</button>
+                        </div>
+                    </div>
+                    <div class="col-12 articleCardContainer">
+                        @foreach (var item in selection)
+                        {
+                        var tags = item.Value<IEnumerable<IPublishedContent>>("test");
+                        var articleCardImage = item.Value<MediaWithCrops>("ArticleCardImage");
+                        
+                        <div class="col-5 col-md-3 articleCard">
+                            <a href="@item.Url()">
+                                <div class="publishDate"><small>@item.CreateDate.ToString("MMM dd")</small></div>
+                                @if (item.HasValue("ArticleCardImage"))
+                                {
+                                    <img src="@articleCardImage.MediaUrl()" alt="@item.Value("ArticleCardTitle")">
+                                }
+                                @foreach(var tag in tags){
+                                <small class="pe-1">@tag.Value("categoryTitle")</small>
+                                }
+                                <p>@item.Value("ArticleCardTitle")</p>
+                                <small>@item.Value("articleCardIntroText").ToString().Substring(0, 140)...</small>
+                            </a>
+                        </div>
+                       
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    }
+}
+}

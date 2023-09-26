@@ -1,0 +1,23 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Umbraco.Cms.Core.Models
+
+@{
+    var content = (ContentModels.Reviews)Model.Content;
+}
+
+<div class="col-5 col-md-3 reviewCard">
+    <div class="reviewStars">
+        @{
+            var stars = content.ReviewStars;
+            for(int i = 0; i < stars; i++){
+                <i class="fa-solid fa-star" style="color: #fd6717;"></i>
+            }
+        }
+    </div>
+    <p>"@content.Value("reviewText")"</p>
+    <h6>@content.Value("reviewName")</h6>
+    <small>@content.Value("reviewCompany")</small>
+</div>

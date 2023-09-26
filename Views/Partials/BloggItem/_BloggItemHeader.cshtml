@@ -1,0 +1,23 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.BloggItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Services;
+@using Umbraco.Cms.Core.Models.PublishedContent;
+@inject IUserService UserService;
+@{
+var tags = Model.Value<IEnumerable<IPublishedContent>>("test");
+
+}
+ <div class="col-12 col-md-7 articleHeader">
+    <h2>@Model.Name</h2>
+    <div>
+        <small>@Model.CreateDate.ToString("MMM dd, yyyy")</small>
+        <i class="fa-solid fa-circle" style="color: #ffde66;"></i>
+        @foreach (var tag in tags)
+        {
+            <small class="px-1">@tag.Value("categoryTitle")</small>
+        }
+        <i class="fa-solid fa-circle" style="color: #ffde66;"></i>
+        <small>@Model.CreatorName(UserService)</small>
+    </div>
+</div>

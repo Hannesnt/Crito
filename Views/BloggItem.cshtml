@@ -1,0 +1,26 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.BloggItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "_Layout.cshtml";
+	var test = Model.Value<IEnumerable<IPublishedContent>>("test");
+}
+
+@await Html.PartialAsync("_BreadCrumb")
+<section class="singleArticle">
+    <div class="container">
+        <div class="row">
+            @await Html.PartialAsync("BloggItem/_BloggItemHeader")
+            <div class="col-12 articleAsideContainer">
+                @await Html.PartialAsync("BloggItem/_BloggItemArticle")
+                @await Html.PartialAsync("BloggItem/_BloggItemArticleAside")
+            </div>
+        </div>
+    </div>
+</section>
+
+@await Umbraco.RenderMacroAsync("BloggItemArticleSection", new {smallSection="1", articleId=@Model.Id})
+
+
+
+

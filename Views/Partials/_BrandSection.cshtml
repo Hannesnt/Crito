@@ -1,0 +1,21 @@
+﻿@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+
+<section class="LogoSection">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 LogoContainer">
+                    @{
+                        var brandImages = Model.Value<IEnumerable<MediaWithCrops>>("brandsImages");
+                        foreach(var entry in brandImages)
+                        {
+                            <div class="col-2">
+                            <img src="@entry.MediaUrl()" alt="">
+                            </div>
+                        }
+                     }
+                </div>
+            </div>
+        </div>
+</section>
+

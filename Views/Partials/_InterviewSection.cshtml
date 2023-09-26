@@ -1,0 +1,42 @@
+﻿@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+<section class="AboutCompanySection">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-12 AboutContainer">
+                    <div class="col-12 col-lg-5 AboutCompanyImg">
+                    @{
+                        var interviewImage = Model.Value<MediaWithCrops>("interviewImage");
+                        var interviewPersonName = Model.Value("interviewPersonName");
+                        var interviewQoute = Model.Value("interviewQoute");
+                        if(interviewImage != null)
+                            {
+                            <img src="@interviewImage.MediaUrl()" alt="@Model.Value("interviewHeadingTitle")">
+                        }
+
+                        if (interviewQoute != null && !string.IsNullOrEmpty(interviewQoute.ToString()))
+                        {
+                            <div class="qouteWindow col-7">
+                                <p class="employee">@Model.Value("interviewedPersonName")</p>
+                                <small>@Model.Value("interviewQoute")</small>
+                            </div>
+                        }
+                    }
+
+                    </div>
+                    <div class="col-12 col-lg-6 AboutCompanyArticle">
+                        <p class="smallTitle">@Model.Value("interviewHeadingTitle")</p>
+                        <h1>@Model.Value("interviewTitle")</h1>
+                        <p>@Model.Value("interviewText")</p>
+                        <div class="col-12 AboutCompanyButtons">
+                            <a class="btn btn-dark" href="@Model.Value("interviewButtonUrl")">Learn More</a>
+                            <div>
+                                <button class="btn btn-light"><i class="fa-solid fa-play"></i></button>
+                                <span>Intro Video</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
