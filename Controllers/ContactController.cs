@@ -1,4 +1,5 @@
-﻿using Crito.Models;
+﻿using Crito.Context;
+using Crito.Models;
 using Crito.Services;
 using MailKit;
 using Microsoft.AspNetCore.Mvc;
@@ -14,25 +15,38 @@ namespace Crito.Controllers;
 
 public class ContactsController : SurfaceController
 {
-    public ContactsController(IUmbracoContextAccessor umbracoContextAccessor, IUmbracoDatabaseFactory databaseFactory, ServiceContext services, AppCaches appCaches, IProfilingLogger profilingLogger, IPublishedUrlProvider publishedUrlProvider) : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
+    protected readonly ContactContext _contactContext;
+
+    public ContactsController(ContactContext contactContext, IUmbracoContextAccessor umbracoContextAccessor, IUmbracoDatabaseFactory databaseFactory, ServiceContext services, AppCaches appCaches, IProfilingLogger profilingLogger, IPublishedUrlProvider publishedUrlProvider) : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
+        _contactContext = contactContext;
     }
 
     [HttpPost]
     public async Task<IActionResult> Index(ContactForm contactForm)
     {
         if (!ModelState.IsValid)
-            return CurrentUmbracoPage();
+        {
+            TempData["ErrorMessage"] = "Form was not submitted.";
+            return LocalRedirect("/contact");
+        }
+        else
+        {
+            TempData["SuccessMessage"] = "Form submitted successfully";
+            using var mail = new Services.MailService("no-reply@crito.com", "smtp.crito.com", 587, "contactform@crito.com", "password");
 
-        using var mail = new Services.MailService("no-reply@crito.com", "smtp.crito.com", 587, "contactform@crito.com", "password");
+            await mail.SendAsync(contactForm.Email, "Your request was recieved.", "Hi your Rquest was recieved and we will be in contact with you as soon as possible.").ConfigureAwait(false);
 
-        //To sender
-        await mail.SendAsync(contactForm.Email, "Your request was recieved.", "Hi your Rquest was recieved and we will be in contact with you as soon as possible.").ConfigureAwait(false);
+            await mail.SendAsync("Hannes@hotmail.com", $"{contactForm.Name} sent a contact request", contactForm.Message).ConfigureAwait(false);
+            await _contactContext.Contacts.AddAsync(contactForm);
+            await _contactContext.SaveChangesAsync();
 
-        //To reciever
-        await mail.SendAsync("Hannes@hotmail.com", $"{contactForm.Name} sent a contact request", contactForm.Message).ConfigureAwait(false);
+            return LocalRedirect("/contact");
+        }
 
 
-        return LocalRedirect(contactForm.ReDirectUrl ?? "/");
+
+
+        
     }
 }

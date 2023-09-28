@@ -29,65 +29,106 @@
     var totalItems = selection?.Count() ?? 0;
     var pagedItems = selection?.Skip((pageNumber - 1) * itemsPerPage).Take(itemsPerPage);
 }
+
+@if(selection.Count() > 0)
+{
     <section class="articles">
         <div class="container">
             <div class="row">
                 <div class="col-12 articleContainer">
                     <div class="col-12 articleCardContainer">
-                    @foreach (var item in pagedItems)
-                    {
-                        var tags = item.Value<IEnumerable<IPublishedContent>>("test");
-                        var articleCardImage = item.Value<MediaWithCrops>("ArticleCardImage");
-                    
-                        <div class="col-5 col-md-3 articleCard">
-                            <a href="@item.Url()">
-                                <div class="publishDate"><small>@item.CreateDate.ToString("MMM dd")</small></div>
-                                @if (item.HasValue("ArticleCardImage"))
-                                {
-                                    <img src="@articleCardImage.MediaUrl()" alt="@item.Value("ArticleCardTitle")">
-                                }
-                                @foreach(var tag in tags)
-                                {
-                                    <small class="pe-1">@tag.Value("categoryTitle")</small>
-                                }
-                                <p>@item.Value("ArticleCardTitle")</p>
-                                <small>@item.Value("articleCardIntroText").ToString().Substring(0, 140)...</small>
-                            </a>
-                        </div>
-                    }
+                        @foreach (var item in pagedItems)
+                        {
+                            var tags = item.Value<IEnumerable<IPublishedContent>>("test");
+                            var articleCardImage = item.Value<MediaWithCrops>("ArticleCardImage");
+
+                            <div class="col-5 col-md-3 articleCard">
+                                <a href="@item.Url()">
+                                    <div class="publishDate"><small>@item.CreateDate.ToString("MMM dd")</small></div>
+                                    @if (item.HasValue("ArticleCardImage"))
+                                    {
+                                        <img src="@articleCardImage.MediaUrl()" alt="@item.Value("ArticleCardTitle")">
+                                    }
+                                    @foreach (var tag in tags)
+                                    {
+                                        <small class="pe-1">@tag.Value("categoryTitle")</small>
+                                    }
+                                    <p>@item.Value("ArticleCardTitle")</p>
+                                    <small>@item.Value("articleCardIntroText").ToString().Substring(0, 140)...</small>
+                                </a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+
+
+    <div class="pagination col-12">
+        <nav class="item-pagination col-4" aria-label="Page navigation">
+            @if (pageNumber > 1)
+            {
+                <a href="?page=@(pageNumber - 1)" class="item-link link-prev" aria-label="Previous">
+                    <span aria-hidden="true"><i class="fa-sharp fa-solid fa-chevron-left"></i></span>
+                </a>
+            }
+
+            @for (int i = 1; i <= Math.Ceiling((decimal)totalItems / itemsPerPage); i++)
+            {
+                if (i == pageNumber)
+                {
+                    <a href="?page=@i" class="item-link active">@i</a>
+                }
+                else
+                {
+                    <a href="?page=@i" class="item-link">@i</a>
+                }
+            }
+
+            @if (pageNumber < Math.Ceiling((decimal)totalItems / itemsPerPage))
+            {
+                <a href="?page=@(pageNumber + 1)" class="item-link item-next" aria-label="Next">
+                    <span aria-hidden="true"><i class="fa-sharp fa-solid fa-chevron-right"></i></span>
+                </a>
+            }
+        </nav>
+    </div>
+}
+else
+{
+    <div class="col-12 my-5 text-center">
+        <h4>Unfortunately there are no posts in this category, check out our other categories below </h4>
+    </div>
+
+	var categorySelection = Umbraco.Content(Guid.Parse("a469b979-3896-40da-9729-b6ffa4443428"))?
+    .ChildrenOfType("category")?
+    .Where(x => x.IsVisible());
     
     
-    
-    
-    <nav class="item-pagination" aria-label="Page navigation">
-    @if (pageNumber > 1)
-    {
-        <a href="?page=@(pageNumber - 1)" class="item-link link-prev" aria-label="Previous">
-            <span aria-hidden="true"><i class="fa-sharp fa-solid fa-chevron-left"></i></span>
-        </a>
-    }
-    
-    @for (int i = 1; i <= Math.Ceiling((decimal)totalItems / itemsPerPage); i++)
-    {
-        if (i == pageNumber)
+    var bloggItems = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))?
+    .ChildrenOfType("bloggItem")?
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate);
+
+
+    <div class="d-flex justify-content-center col-12 flex-wrap itemsByCategory">
+            @foreach (var item in categorySelection)
         {
-            <a href="?page=@i" class="item-link active">@i</a>
+            var numberOfPosts = 0;
+            @foreach (var post in bloggItems)
+            {
+
+                var lol = post.Value<IEnumerable<IPublishedContent>>("test")?.ToList();
+                if (lol.Any(x => x.Name == item.Name))
+                {
+                    numberOfPosts++;
+                } 
+            }
+            <div class="text-center col-4 my-4">
+                <a href="@item.Url()">@item.Name() <small>@numberOfPosts posts</small></a>
+            </div>
         }
-        else
-        {
-            <a href="?page=@i" class="item-link">@i</a>
-        }
-    }
-    
-    @if (pageNumber < Math.Ceiling((decimal)totalItems / itemsPerPage))
-    {
-        <a href="?page=@(pageNumber + 1)" class="item-link item-next" aria-label="Next">
-            <span aria-hidden="true"><i class="fa-sharp fa-solid fa-chevron-right"></i></span>
-        </a>
-    }
-    </nav> 
+    </div>
+}

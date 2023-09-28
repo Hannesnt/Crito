@@ -2,20 +2,42 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Categories>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
 @{
-	Layout = null;
+	Layout = "_Layout.cshtml";
 }
 
 @{
 	var selection = Umbraco.Content(Guid.Parse("a469b979-3896-40da-9729-b6ffa4443428"))
     .ChildrenOfType("category")
     .Where(x => x.IsVisible());
+    
+    
+    var bloggItems = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate);
+
 }
-<ul>
-	@foreach (var item in selection)
-	{
-		<li>
-			<a href="@item.Url()">@item.Name()</a>
-		</li>
-	}
-</ul>
+
+
+@await Html.PartialAsync("_BreadCrumb")
+<div class="d-flex justify-content-center col-12 flex-wrap itemsByCategory">
+    @foreach (var item in selection)
+    {
+        var numberOfPosts = 0;
+        @foreach (var post in bloggItems)
+        {
+
+            var lol = post.Value<IEnumerable<IPublishedContent>>("test").ToList();
+            if (lol.Any(x => x.Name == item.Name))
+            {
+                numberOfPosts++;
+            } 
+        }
+        <div class="text-center col-4 my-4">
+            <a href="@item.Url()">@item.Name() <small>@numberOfPosts posts</small></a>
+        </div>
+    }
+</div>
+
+
 

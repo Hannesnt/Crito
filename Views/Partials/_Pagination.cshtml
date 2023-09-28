@@ -1,30 +1,26 @@
-﻿@inherits Umbraco.Cms.Web.Common.Macros.PartialViewMacroPage
+﻿
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
-@using Umbraco.Cms.Core.Models.Blocks;
-@using Umbraco.Cms.Core.Models
-@using Umbraco.Cms.Web.Common.PublishedModels;
-@using Umbraco.Cms.Core.Services;
-@using Umbraco.Cms.Core.Models.PublishedContent;
-@inject IUserService UserService;
+@model List<IPublishedContent>
 
-@{
-    var itemsPerPage = 9;
+@{  
+
+ var itemsPerPage = 9;
     var pageNumber = 1;
     
     if (!int.TryParse(Context.Request.Query["page"], out pageNumber))
     {
         pageNumber = 1;
     }
+    
+    
+    var totalItems = Model?.Count() ?? 0;
+    var pagedItems = Model?.Skip((pageNumber - 1) * itemsPerPage).Take(itemsPerPage); 
+}
 
-      var selection = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))
-      .ChildrenOfType("bloggItem")
-      .Where(x => x.IsVisible())
-      .OrderByDescending(x => x.CreateDate).ToList();
-    
-    var totalItems = selection?.Count() ?? 0;
-    var pagedItems = selection?.Skip((pageNumber - 1) * itemsPerPage).Take(itemsPerPage);
-    
-    <nav class="item-pagination" aria-label="Page navigation">
+
+
+<div class="pagination col-12">
+    <nav class="item-pagination col-4" aria-label="Page navigation">
         @if (pageNumber > 1)
         {
             <a href="?page=@(pageNumber - 1)" class="item-link link-prev" aria-label="Previous">
@@ -50,5 +46,5 @@
                 <span aria-hidden="true"><i class="fa-sharp fa-solid fa-chevron-right"></i></span>
             </a>
         }
-    </nav> 
-}
+    </nav>
+</div> 

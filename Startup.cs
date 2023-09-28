@@ -1,3 +1,8 @@
+using Crito.Context;
+using Crito.Services;
+using Serilog.Context;
+using Umbraco.Extensions;
+
 namespace Crito
 {
     public class Startup
@@ -35,6 +40,9 @@ namespace Crito
                 .AddDeliveryApi()
                 .AddComposers()
                 .Build();
+
+            services.AddUmbracoEFCoreContext<ContactContext>("{umbracoDbDSN}", "{umbracoDbDSN_Pro   viderName}");
+            services.AddScoped<SubscriptionService>();
         }
 
         /// <summary>

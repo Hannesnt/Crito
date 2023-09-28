@@ -1,0 +1,42 @@
+﻿
+@using Umbraco.Cms.Core.Models
+@model List<IPublishedContent>
+
+
+<section class="articles">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 articleContainer">
+                <div class="col-12 articlesTitle">
+                    <p>Article & News</p>
+                    <div>
+                        <h1>Get Every Single Article & News</h1>
+                        <button class="btn">Browse Articles</button>
+                    </div>
+                </div>
+                <div class="col-12 articleCardContainer">
+                    @foreach (var item in Model)
+                    {
+                        var tags = item.Value<IEnumerable<IPublishedContent>>("test");
+                        var articleCardImage = item.Value<MediaWithCrops>("ArticleCardImage");
+                        
+                        <div class="col-5 col-md-3 articleCard">
+                            <a href="@item.Url()">
+                                <div class="publishDate"><small>@item.CreateDate.ToString("MMM dd")</small></div>
+                                @if (item.HasValue("ArticleCardImage"))
+                                {
+                                    <img src="@articleCardImage.MediaUrl()" alt="@item.Value("ArticleCardTitle")">
+                                }
+                                @foreach(var tag in tags){
+                                    <small class="pe-1">@tag.Value("categoryTitle")</small>
+                                }
+                                <p>@item.Value("ArticleCardTitle")</p>
+                                <small>@item.Value("articleCardIntroText").ToString().Substring(0, 140)...</small>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

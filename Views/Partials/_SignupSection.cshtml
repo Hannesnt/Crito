@@ -1,4 +1,8 @@
 ﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Crito.Models;
+@{
+    var subscriptionForm = new SubscriptionForm();
+}
 <section class="signUp">
     <div class="container">
         <div class="row">
@@ -8,8 +12,11 @@
                         <h2>Get News Updates By Signup</h2>
                     </div>
                     <div class="col-12 col-lg-5 subscribeBtn">
-                        <input type="text" id="email" name="email" placeholder="username@domain.com">
-                        <button class="btn btn-warning">Subscribe</button>
+                        @using (Html.BeginUmbracoForm("Index", "Subscription", FormMethod.Post))
+                        {
+                            <input type="email" id="email" name="email" asp-for="@subscriptionForm.Email" placeholder="username@domain.com">
+                            <button class="btn btn-warning">Subscribe</button>
+                        }
                     </div>
                 </div>
             </div>

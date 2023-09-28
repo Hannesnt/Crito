@@ -11,6 +11,7 @@
 @{ 
     var site = Model.Root();
     var selection = Model.Root().Children.Where(x => x.IsVisible(PublishedValueFallback)).ToArray(); 
+    var isLoggedIn = Context.User?.Identity?.IsAuthenticated ?? false;
 }
 
 
@@ -48,16 +49,31 @@
                             {
                                 @foreach (var item in selection)
                                 {
-                                    @if(item.Id != 1198){
-                                        <a class="@(item.IsAncestorOrSelf(Model) ? "active" : null)" href="@item.Url(PublishedUrlProvider)">@item.Name</a>
+                                    @if(isLoggedIn)
+                                    {
+                                        @if(item.Id != 1198 && item.Id != 1225 && item.Id != 1226)
+                                        {
+
+                                            <a class="@(item.IsAncestorOrSelf(Model) ? "active" : null)" href="@item.Url(PublishedUrlProvider)">@item.Name</a>
+                                        
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if(item.Id != 1198)
+                                        {
+
+                                            <a class="@(item.IsAncestorOrSelf(Model) ? "active" : null)" href="@item.Url(PublishedUrlProvider)">@item.Name</a>
+                                        
+                                        }
                                     }
 
                                 }
                             }
                             
                         </div>
-                        <div class="col-2 login Nav">
-                            <button class="btn btn-warning">Login</button>
+                        <div class="col-5 justify-content-around login Nav">
+                            @await Html.PartialAsync("_LoginStatus")
                         </div>
                     </div>
                 </div>

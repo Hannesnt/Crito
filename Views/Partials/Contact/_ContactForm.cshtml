@@ -11,6 +11,18 @@
                     <h2>Leave us a message for any information.</h2>
                 </div>
                 <div class="col-10 formDiv">
+                    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+                    {
+                        <div class="alert alert-success">
+                            <strong>Thanks for contacting us. </strong><br />@TempData["SuccessMessage"]
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Something went wrong. </strong><br />@TempData["ErrorMessage"]
+                        </div>
+                    }
                 @using (Html.BeginUmbracoForm("Index", "Contacts", FormMethod.Post))
                 {
                     <div class="col-10">
