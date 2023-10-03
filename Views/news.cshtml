@@ -4,14 +4,34 @@
 
 @using Umbraco.Cms.Core.Models.Blocks;
 
-@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models;
 @{
 	Layout = "_Layout.cshtml";
 	ViewData["PageTitle"] = @Model.Value("pageTitle");
 	ViewData["PageDescription"] = @Model.Value("pageDescription");
 	ViewData["PageKeywords"] = @Model.Value("pageKeywords");
+
+    var itemsPerPage = 9;
+    var pageNumber = 1;
+
+    if (!int.TryParse(Context.Request.Query["page"], out pageNumber))
+    {
+        pageNumber = 1;
+    }
+
+
+
+    var selection = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate);
+
+    var totalItems = selection?.Count() ?? 0;
+    var pagedItems = selection?.Skip((pageNumber - 1) * itemsPerPage).Take(itemsPerPage).ToList();
 }
 
     @await Html.PartialAsync("_BreadCrumb")
-    @await Umbraco.RenderMacroAsync("Articles", new {smallSection="0"})
+    @await Html.PartialAsync("_Searchbar")
+    @await Html.PartialAsync("NewsPage/_NewsPageArticleSection", pagedItems)
+    @await Html.PartialAsync("_Pagination", selection)
     @await Html.PartialAsync("_SignupSection")

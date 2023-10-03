@@ -1,0 +1,28 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.News>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "../_Layout.cshtml";
+}
+@{
+    var itemsPerPage = 9;
+    var pageNumber = 1;
+
+    if (!int.TryParse(Context.Request.Query["page"], out pageNumber))
+    {
+        pageNumber = 1;
+    }
+
+
+
+    var selection = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate);
+
+    var totalItems = selection?.Count() ?? 0;
+    var pagedItems = selection?.Skip((pageNumber - 1) * itemsPerPage).Take(itemsPerPage).ToList();
+}
+
+@await Html.PartialAsync("NewsPage/_NewsPageArticleSection", pagedItems)
+@await Html.PartialAsync("_SignupSection")

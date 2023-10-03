@@ -1,23 +1,44 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IEnumerable<IPublishedContent>>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
 @using Umbraco.Cms.Core.Models.Blocks;
 @using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Services;
+@using Umbraco.Cms.Core.Models.PublishedContent;
 
-@{
-    var articleCardList = Model.ArticleCard;
-    var blockList = new BlockListModel(articleCardList.Reverse().ToList());
-}
+
+
 
 <section class="articles">
     <div class="container">
         <div class="row">
             <div class="col-12 articleContainer">
-                <div class="col-12 articlesTitle">
-                    <h1>Our News And Articles</h1>
+                <div class="col-12 articlesTitle d-flex justify-content-center">
+                    <div>
+                        <h1>Article & News</h1>
+                    </div>
                 </div>
                 <div class="col-12 articleCardContainer">
-                    @Html.GetBlockListHtml(blockList)
+                    @foreach (var item in Model)
+                    {
+                        var tags = item.Value<IEnumerable<IPublishedContent>>("test");
+                        var articleCardImage = item.Value<MediaWithCrops>("ArticleCardImage");
+                        
+                        <div class="col-5 col-md-3 articleCard">
+                            <a href="@item.Url()">
+                                <div class="publishDate"><small>@item.CreateDate.ToString("MMM dd")</small></div>
+                                @if (item.HasValue("ArticleCardImage"))
+                                {
+                                    <img src="@articleCardImage.MediaUrl()" alt="@item.Value("ArticleCardTitle")">
+                                }
+                                @foreach(var tag in tags){
+                                    <small class="pe-1">@tag.Value("categoryTitle")</small>
+                                }
+                                <p>@item.Value("ArticleCardTitle")</p>
+                                <small>@item.Value("articleCardIntroText").ToString().Substring(0, 140)...</small>
+                            </a>
+                        </div>
+                    } 
                 </div>
             </div>
         </div>

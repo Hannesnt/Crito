@@ -1,18 +1,16 @@
-﻿
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IEnumerable<IPublishedContent>>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
-@model List<IPublishedContent>
+
 
 @{  
 
- var itemsPerPage = 9;
+    var itemsPerPage = 9;
     var pageNumber = 1;
     
     if (!int.TryParse(Context.Request.Query["page"], out pageNumber))
     {
         pageNumber = 1;
     }
-    
-    
     var totalItems = Model?.Count() ?? 0;
     var pagedItems = Model?.Skip((pageNumber - 1) * itemsPerPage).Take(itemsPerPage); 
 }

@@ -18,6 +18,7 @@
             .OrderByDescending(x => x.CreateDate).Take(3).ToList();
     
         Html.RenderPartial("_ArticleSection", selection);
+        
     }
     else
     {
