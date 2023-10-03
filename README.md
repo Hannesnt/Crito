@@ -11,5 +11,5 @@ Datan som skrivs in i kontaktformuläret sparas även ned till databasen, med hj
 
 
 <h3>Inlogg Umbraco</h3>
-Hannes@gmail.com
-BytMig123!
+Inlogg: Hannes@gmail.com <br>
+Lösenord: BytMig123!
