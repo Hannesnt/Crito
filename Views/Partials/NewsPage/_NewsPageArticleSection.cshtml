@@ -21,7 +21,7 @@
                 <div class="col-12 articleCardContainer">
                     @foreach (var item in Model)
                     {
-                        var tags = item.Value<IEnumerable<IPublishedContent>>("test");
+                        var tags = item.Value<IEnumerable<IPublishedContent>>("cardCategory");
                         var articleCardImage = item.Value<MediaWithCrops>("ArticleCardImage");
                         
                         <div class="col-5 col-md-3 articleCard">
@@ -35,7 +35,7 @@
                                     <small class="pe-1">@tag.Value("categoryTitle")</small>
                                 }
                                 <p>@item.Value("ArticleCardTitle")</p>
-                                <small>@item.Value("articleCardIntroText").ToString().Substring(0, 140)...</small>
+                                <small>@item.Value("articleCardIntroText")...</small>
                             </a>
                         </div>
                     } 

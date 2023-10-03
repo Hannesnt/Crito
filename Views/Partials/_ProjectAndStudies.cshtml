@@ -4,6 +4,13 @@
 @using Umbraco.Cms.Core.Models.Blocks;
 @using Umbraco.Cms.Core.Models
 
+@{
+	var selection = Umbraco.Content(Guid.Parse("aeada0b5-daf6-4446-863c-78f8a073a14d"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate);
+}
+
 <section class="projectSection">
         <div class="container">
             <div class="row">
@@ -14,13 +21,36 @@
                     </div>
                     <div class="projectCardContainer">
                         
-                        @Html.GetBlockListHtml(Model.ProjectAndStudies)
+                        @foreach (var item in selection)
+	                        {
+                        	<div class="col-5 projectCard">
+                            @{
+                                var projectAndStudiesImage = item.Value<MediaWithCrops>("articleCardImage");
+                                if(projectAndStudiesImage != null)
+                                {
+                                    <img src="@projectAndStudiesImage.MediaUrl()" alt="@item.Value("projectAndStudiesTitle")">
+                                }
+                            }
+                                    <div class="articleTitle">
+                                        <p>@item.Name()</p>
+                                    </div>
+                                    <hr>
+                                    <a href="@item.Url()"><button class="btn btn-light">Read More</button></a>
+                            </div>
+                        	}
                         
                     </div>
                     <div class="projectBtn">
-                        <button class="btn btn-dark">All Recent Projects</button>
+                        <a href="/projects"><button class="btn btn-dark">All Recent Projects</button></a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    
+    
+
+
+
+
+

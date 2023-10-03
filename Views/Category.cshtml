@@ -16,18 +16,20 @@
     .ChildrenOfType("bloggItem")
     .Where(x => x.IsVisible())
     .OrderByDescending(x => x.CreateDate)
-    .Where(itemPage => itemPage.Value<IEnumerable<IPublishedContent>>("Test").Any(item => item.Id == Model.Id));
+    .Where(itemPage => itemPage.Value<IEnumerable<IPublishedContent>>("CardCategory").Any(item => item.Id == Model.Id)).ToList();
 
-    var itemsPerPage = 12;
-    var pageNumber = 1;
     
-    if (!int.TryParse(Context.Request.Query["page"], out pageNumber))
-    {
-        pageNumber = 1;
+	var projects = Umbraco.Content(Guid.Parse("aeada0b5-daf6-4446-863c-78f8a073a14d"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate)
+    .Where(itemPage => itemPage.Value<IEnumerable<IPublishedContent>>("CardCategory").Any(item => item.Id == Model.Id));
+
+
+    foreach(var item in projects){
+        selection.Add(item);
     }
 
-    var totalItems = selection?.Count() ?? 0;
-    var pagedItems = selection?.Skip((pageNumber - 1) * itemsPerPage).Take(itemsPerPage);
 }
 
 @if(selection.Count() > 0)
@@ -37,9 +39,9 @@
             <div class="row">
                 <div class="col-12 articleContainer">
                     <div class="col-12 articleCardContainer">
-                        @foreach (var item in pagedItems)
+                        @foreach (var item in selection)
                         {
-                            var tags = item.Value<IEnumerable<IPublishedContent>>("test");
+                            var tags = item.Value<IEnumerable<IPublishedContent>>("cardCategory");
                             var articleCardImage = item.Value<MediaWithCrops>("ArticleCardImage");
 
                             <div class="col-5 col-md-3 articleCard">
@@ -54,7 +56,7 @@
                                         <small class="pe-1">@tag.Value("categoryTitle")</small>
                                     }
                                     <p>@item.Value("ArticleCardTitle")</p>
-                                    <small>@item.Value("articleCardIntroText").ToString().Substring(0, 140)...</small>
+                                    <small>@item.Value("articleCardIntroText")...</small>
                                 </a>
                             </div>
                         }
@@ -63,38 +65,6 @@
             </div>
         </div>
     </section>
-
-
-
-    <div class="pagination col-12">
-        <nav class="item-pagination col-4" aria-label="Page navigation">
-            @if (pageNumber > 1)
-            {
-                <a href="?page=@(pageNumber - 1)" class="item-link link-prev" aria-label="Previous">
-                    <span aria-hidden="true"><i class="fa-sharp fa-solid fa-chevron-left"></i></span>
-                </a>
-            }
-
-            @for (int i = 1; i <= Math.Ceiling((decimal)totalItems / itemsPerPage); i++)
-            {
-                if (i == pageNumber)
-                {
-                    <a href="?page=@i" class="item-link active">@i</a>
-                }
-                else
-                {
-                    <a href="?page=@i" class="item-link">@i</a>
-                }
-            }
-
-            @if (pageNumber < Math.Ceiling((decimal)totalItems / itemsPerPage))
-            {
-                <a href="?page=@(pageNumber + 1)" class="item-link item-next" aria-label="Next">
-                    <span aria-hidden="true"><i class="fa-sharp fa-solid fa-chevron-right"></i></span>
-                </a>
-            }
-        </nav>
-    </div>
 }
 else
 {
@@ -120,7 +90,7 @@ else
             @foreach (var post in bloggItems)
             {
 
-                var lol = post.Value<IEnumerable<IPublishedContent>>("test")?.ToList();
+                var lol = post.Value<IEnumerable<IPublishedContent>>("cardCategory")?.ToList();
                 if (lol.Any(x => x.Name == item.Name))
                 {
                     numberOfPosts++;

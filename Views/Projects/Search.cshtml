@@ -1,0 +1,35 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Crito.ViewModels.SearchViewModel>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models
+@{
+    Layout = "../_Layout.cshtml";
+}
+
+@await Html.PartialAsync("_BreadCrumb")
+@await Html.PartialAsync("_Searchbar")
+<section class="articles">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 articleContainer ">
+                <div class="col-12 articlesTitle text-center d-flex justify-content-center flex-column">
+                    <div class="text-center d-flex justify-content-center flex-column ">
+                        <h1>You searched for: </h1>
+                        <h2>@Model.SearchedValue</h2>
+                    </div>
+                </div>
+                <div class="col-12 articleCardContainer">
+                    @if (Model.SearchResults.Any())
+                    {
+                        @await Html.PartialAsync("ProjectPage/_ProjectsArticleSection", Model.SearchResults)
+                    }
+                    else if (Model.HasSearched)
+                    {
+                        <p>No results found</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@await Html.PartialAsync("_SignupSection")

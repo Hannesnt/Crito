@@ -2,13 +2,39 @@
 @{
 	var selection = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))
     .ChildrenOfType("bloggItem")
-    .Where(x => x.IsVisible())
-    .OrderByDescending(x => x.CreateDate).Take(4).ToList();
+    .Where(x => x.IsVisible()).ToList();
+
+    var projects = Umbraco.Content(Guid.Parse("aeada0b5-daf6-4446-863c-78f8a073a14d"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => x.IsVisible()).ToList();
+
+    
+    foreach(var item in projects){
+        selection.Add(item);
+    }
+    
+    selection = selection.OrderByDescending(x => x.CreateDate).Take(4).ToList();
+
 
     var bloggItems = Umbraco.Content(Guid.Parse("cff7f32c-73cc-46ce-a426-41f9bbc65d9a"))
     .ChildrenOfType("bloggItem")
     .Where(x => x.IsVisible())
-    .OrderByDescending(x => x.CreateDate);
+    .OrderByDescending(x => x.CreateDate).ToList();
+    
+	
+
+	var bloggItemsProject = Umbraco.Content(Guid.Parse("aeada0b5-daf6-4446-863c-78f8a073a14d"))
+    .ChildrenOfType("bloggItem")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate).ToList();
+
+
+
+    foreach(var item in bloggItemsProject){
+        bloggItems.Add(item);
+    }
+
+    
 }
 
 <aside class="col-12 col-md-4">
@@ -41,8 +67,8 @@
                 @foreach (var post in bloggItems)
                 {
 
-                    var lol = post.Value<IEnumerable<IPublishedContent>>("test").ToList();
-                    if (lol.Any(x => x.Name == item.Name))
+                    var category = post.Value<IEnumerable<IPublishedContent>>("cardCategory").ToList();
+                    if (category.Any(x => x.Name == item.Name))
                     {
                         numberOfPosts++;
                     }
