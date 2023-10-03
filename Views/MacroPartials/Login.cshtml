@@ -10,7 +10,6 @@
 @inject ITwoFactorLoginService twoFactorLoginService
 @{
     var loginModel = new LoginModel();
-    // You can modify this to redirect to a different URL instead of the current one
     loginModel.RedirectUrl = null;
 }
 
@@ -71,7 +70,7 @@ else
                             @Html.DisplayNameFor(m => loginModel.RememberMe)
                         </label>
                     </div>
-                    <a href="/register my-2 my-md-0" class="text-danger">Don't have an account yet?</a>
+                    <a href="/register" class="text-danger  my-2 my-md-0">Don't have an account yet?</a>
                 </div>
     
                 <button type="submit" class="btn btn-warning">Log in</button>
