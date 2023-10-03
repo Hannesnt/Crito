@@ -5,7 +5,7 @@ using Umbraco.Cms.Web.Common;
 
 namespace Crito.Services
 {
-
+    
     public class SearchService : ISearchService
     {
         private readonly IExamineManager _examineManager;
