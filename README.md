@@ -1,6 +1,6 @@
 # Crito
 
-###Logga in på Critos hemsida: 
+<h5>Logga in på Critos hemsida: </h5>
 Du kan registera dig och sedan logga in med samma emailadress på hemsidan. 
 
 ###Sökfunktion finns under News page och Projects page som kan filtrera ut artiklar/projekt efter det du sökt. 
