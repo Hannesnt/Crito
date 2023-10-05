@@ -9,8 +9,12 @@
 @inject IMemberExternalLoginProviders memberExternalLoginProviders
 @inject ITwoFactorLoginService twoFactorLoginService
 @{
-    var loginModel = new LoginModel();
-    loginModel.RedirectUrl = null;
+    var homepageUrl = "/"; 
+
+    var loginModel = new LoginModel
+    {
+        RedirectUrl = homepageUrl
+    };
 }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
